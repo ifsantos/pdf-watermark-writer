@@ -1,52 +1,52 @@
 package com.github.ifsantos.api.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PDFRequest {
+	String inputFolder;
+	List<User> users = new ArrayList<>();
 
-	String licensedName;
-	String cpf;
-	String originFolder;
-	String outputFileName;
-	
-	public PDFRequest() {	}
-	
-	public PDFRequest(String licensedName, String cpf, String originFolder, String outputFileName) {
-		super();
-		this.licensedName = licensedName;
-		this.cpf = cpf;
-		this.originFolder = originFolder;
-		this.outputFileName = outputFileName;
+	public PDFRequest() { }
+
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public String getLicensedName() {
-		return licensedName;
-	}
-	public void setLicensedName(String licensedName) {
-		this.licensedName = licensedName;
-	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public String getOriginFolder() {
-		return originFolder;
-	}
-	public void setOriginFolder(String originFolder) {
-		this.originFolder = originFolder;
-	}
-	public String getOutputFileName() {
-		return outputFileName;
-	}
-	public void setOutputFileName(String outputFileName) {
-		this.outputFileName = outputFileName;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
-	@Override
-	public String toString() {
-		return "PDFRequest [protectedName=" + licensedName + ", cpf=" + cpf + ", originFolder=" + originFolder
-				+ ", outputFileName=" + outputFileName + "]";
+	public String getInputFolder() {
+		return inputFolder;
 	}
-	
-	
+
+	public void setInputFolder(String originFolder) {
+		this.inputFolder = originFolder;
+	}
+
+	public static class User {
+		String licensedName;
+		String cpf;
+
+		public User() { }
+
+		public String getLicensedName() {
+			return licensedName;
+		}
+
+		public void setLicensedName(String licensedName) {
+			this.licensedName = licensedName;
+		}
+
+		public String getCpf() {
+			return cpf;
+		}
+
+		public void setCpf(String cpf) {
+			this.cpf = cpf;
+		}
+
+	}
+
 }

@@ -1,22 +1,24 @@
 package com.github.ifsantos.api.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PDFResponse {
 
-	String outputFilePath;
+	List<String> outputFilePath = new ArrayList<>();
 	
 	public PDFResponse() {	}
 
-	public PDFResponse(String outputFilePath) {
-		super();
-		this.outputFilePath = outputFilePath;
-	}
-
-	public String getOutputFilePath() {
+	public List<String> getOutputFilePath() {
 		return outputFilePath;
 	}
 
-	public void setOutputFilePath(String outputFilePath) {
+	public void setOutputFilePath(List<String> outputFilePath) {
 		this.outputFilePath = outputFilePath;
+	}
+	
+	public void add(String folder) {
+		this.outputFilePath.add(folder);
 	}
 	
 }
