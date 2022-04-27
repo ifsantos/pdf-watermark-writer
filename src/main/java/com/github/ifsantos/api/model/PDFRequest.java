@@ -46,7 +46,5 @@ public class PDFRequest {
 		public void setCpf(String cpf) {
 			this.cpf = cpf;
 		}
-
 	}
-
 }
