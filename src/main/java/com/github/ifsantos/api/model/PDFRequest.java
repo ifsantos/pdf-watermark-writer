@@ -29,22 +29,18 @@ public class PDFRequest {
 		String licensedName;
 		String cpf;
 
-		public User() { }
+		public User(String licensedName, String cpf) {
+			super();
+			this.licensedName = licensedName;
+			this.cpf = cpf;
+		}
 
 		public String getLicensedName() {
 			return licensedName;
 		}
 
-		public void setLicensedName(String licensedName) {
-			this.licensedName = licensedName;
-		}
-
 		public String getCpf() {
 			return cpf;
-		}
-
-		public void setCpf(String cpf) {
-			this.cpf = cpf;
 		}
 	}
 }

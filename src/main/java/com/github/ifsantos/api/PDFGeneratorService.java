@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.ifsantos.PDFGenerator;
 import com.github.ifsantos.api.model.PDFRequest;
-import com.github.ifsantos.api.model.PDFRequest.User;
 import com.github.ifsantos.api.model.PDFResponse;
 
 @RestController
@@ -18,16 +17,17 @@ import com.github.ifsantos.api.model.PDFResponse;
 public class PDFGeneratorService {
 	@Autowired
 	public PDFGenerator generator;
-	
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public PDFResponse generate(@RequestBody PDFRequest r) {
 		PDFResponse resp = new PDFResponse();
-		for (User user : r.getUsers()) {
-			resp.add(generator.generatePDF(r.getInputFolder(), user.getLicensedName(), user.getCpf()));
-		}
+		r.getUsers().forEach(user -> {
+			resp.add(generator.generatePDF(r.getInputFolder(), user.getLicensedName(), user.getCpf(),
+					System.currentTimeMillis()));
+		});
 		return resp;
-		
+
 	}
 
 }

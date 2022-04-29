@@ -13,10 +13,6 @@ public class PDFResponse {
 		return outputFilePath;
 	}
 
-	public void setOutputFilePath(List<String> outputFilePath) {
-		this.outputFilePath = outputFilePath;
-	}
-	
 	public void add(String folder) {
 		this.outputFilePath.add(folder);
 	}

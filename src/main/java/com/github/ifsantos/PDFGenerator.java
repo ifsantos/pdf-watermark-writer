@@ -5,69 +5,55 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
-import javax.imageio.ImageIO;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.ifsantos.io.IOHandler;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfName;
 
 @Service
 public class PDFGenerator {
+	@Autowired
+	private IOHandler io;
+	
+	String S = File.separator;
 
-	public String generatePDF(String inputFolder, String licencedName, String cpf)  {
-		String outputFileName = licencedName.replace(" ", "_");
-		Document document = new Document();
-		String outputFolder = inputFolder + "//output//";
-		String outputFilePath = outputFolder + outputFileName + System.currentTimeMillis() + ".pdf";
-		try {
-			Files.createDirectories(Paths.get(outputFolder));
-			PdfWriter.getInstance(document, new FileOutputStream(outputFilePath));
-			document.setPageSize(new Rectangle(1920, 1080));
-			document.setMargins(0, 0, 0, 0);
-			document.open();
-			for (String inputFile : getFilesFromFolder(inputFolder)) {
-				byte[] watermarkedImageBytes = writeWatermark(readImage(inputFolder + "//" + inputFile), licencedName, cpf).toByteArray();
-				Image img = Image.getInstance(watermarkedImageBytes);			
-				document.add(img);
-			}
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public String generatePDF(String inputFolder, String licencedName, String cpf, Long timestamp)  {
+		String outputFileName = licencedName.replace(" ", "_") + timestamp + ".pdf";
+		String outputFolder = inputFolder + S + "output";
+		
+		Document document = io.pdfDocumentFactory(outputFolder, outputFileName);
+		document.setPageSize(new Rectangle(1920, 1080));
+		document.setMargins(0, 0, 0, 0);
+		document.open();
+		
+		io.getFileNamesFromFolder(inputFolder, getPngFileFilter())
+			.forEach(inputFile -> {
+				byte[] watermarkedImageBytes = writeWatermark(io.readImage(inputFolder + S + inputFile), licencedName, cpf);
+				addWatermarkedImgToPdf(watermarkedImageBytes, document);
+			});
+	
 		document.close();
-		return outputFilePath;
+		return io.getOutputFilePath();
 	}
 
-	private List<String> getFilesFromFolder(String sourceFolder) {
-		File folder = new File(sourceFolder);
-		if (folder.isDirectory()) {
-			List<String> files = Arrays.asList(folder.list(getPngFileFilter()));
-			files.sort(getStringComparator());
-			return files;
-		}
-		return null;
-	}
-
-	private BufferedImage readImage(String imagePath) {
+	private void addWatermarkedImgToPdf(byte[] watermarkedImageBytes, Document document)  {
+		Image img;
 		try {
-			return ImageIO.read(new File(imagePath));
+			img = Image.getInstance(watermarkedImageBytes);
+			document.add(img);
+		
 		} catch (Exception e) {
-			return null;
-		}
+			e.printStackTrace();
+		}			
 	}
 	
-	private ByteArrayOutputStream writeWatermark(BufferedImage image, String licencedName, String cpf) {
+	private byte[] writeWatermark(BufferedImage image, String licencedName, String cpf) {
 	    Graphics g = image.getGraphics();
 	    g.setFont(g.getFont().deriveFont(35f));
 	    g.setColor(new Color(0, 0, 0, 125));
@@ -76,12 +62,8 @@ public class PDFGenerator {
 	    drawLicensedName(licencedName, g);
 	    g.dispose();
 	    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	    try {
-			ImageIO.write(image, "png", bos);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    return bos;
+	    io.writeImage(image, bos);
+	    return bos.toByteArray();
 	}
 
 	private void drawLicensedName(String licencedName, Graphics g) {
@@ -99,15 +81,6 @@ public class PDFGenerator {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.toLowerCase().endsWith(".png");
-			}
-		};
-	}
-	
-	private Comparator<String> getStringComparator() {
-		return new Comparator<String>() {
-			@Override
-			public int compare(String o1, String o2) {
-				return o1.compareTo(o2);
 			}
 		};
 	}
