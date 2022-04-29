@@ -17,28 +17,36 @@ import javax.imageio.ImageIO;
 import org.springframework.stereotype.Service;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class IOHandler {
-	public static final String S = File.separator;
-	
-	String outputFilePath;
-	
 
 	public BufferedImage readImage(String imagePath) {
 		try {
 			return ImageIO.read(new File(imagePath));
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		}
 	}
 
-	public void writeImage(BufferedImage image, ByteArrayOutputStream bos) {
+	public byte[] getImageBytes(BufferedImage image) {
 		try {
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ImageIO.write(image, "png", bos);
+			return bos.toByteArray();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void addImageToPdf(byte[] imageBytes, Document document) {
+		try {
+			Image img = Image.getInstance(imageBytes);
+			document.add(img);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -46,19 +54,14 @@ public class IOHandler {
 		return Arrays.stream(new File(sourceFolder).list(fileType)).sorted().collect(Collectors.toList());
 	}
 
-	public Document pdfDocumentFactory(String outputFolder, String outputFileName) {
+	public Document pdfDocumentFactory(String outputFilePath) {
 		Document document = new Document();
 		try {
-			Files.createDirectories(Paths.get(outputFolder));
-			PdfWriter.getInstance(document, new FileOutputStream(outputFolder + S + outputFileName));
+			Files.createDirectories(Paths.get(outputFilePath).getParent());
+			PdfWriter.getInstance(document, new FileOutputStream(outputFilePath));
 		} catch (Exception e) {
-			return null;
+			throw new RuntimeException(e);
 		}
 		return document;
 	}
-
-	public String getOutputFilePath() {
-		return this.outputFilePath;
-	}
-
 }
