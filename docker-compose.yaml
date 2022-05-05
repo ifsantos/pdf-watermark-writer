@@ -1,0 +1,12 @@
+version: "3"
+services:
+  app:
+    build: .
+    volumes:
+      - .:/usr/src/java
+      - ./../../mock/pdf-gen:/tmp/data
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    ports:
+      - "8080:8080"
+      

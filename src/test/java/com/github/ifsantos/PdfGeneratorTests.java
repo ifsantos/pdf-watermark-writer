@@ -6,27 +6,32 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.ifsantos.io.IOHandler;
+import com.itextpdf.text.Document;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import com.github.ifsantos.io.IOHandler;
-import com.itextpdf.text.Document;
 
 @SpringBootTest
 class PdfGeneratorTests {
+	private static Logger log = LoggerFactory.getLogger(PdfGeneratorTests.class);
 	@InjectMocks
 	PDFGenerator p;
 	@Mock
 	IOHandler h;
 	private String inputDir = "C:\\code_home\\mock\\pdf-gen";
 	Long timestamp = System.currentTimeMillis();
-	String expected = "C:\\code_home\\mock\\pdf-gen\\output\\Agenor_de_Miranda_Araújo_Neto"+timestamp+".pdf";
+	String expected = inputDir + File.separator +"output"+File.separator+"Agenor_de_Miranda_Araújo_Neto"+timestamp+".pdf";
 	
 	@BeforeEach
 	void setUp() throws Exception {
@@ -42,10 +47,18 @@ class PdfGeneratorTests {
 	
 	@Test
 	void generatePDFSucess() {
+		p.setInputFolder(inputDir);
+		String generatePDF = p.generatePDF("Agenor de Miranda Araújo Neto", "999.888.777-45",timestamp );
 		
-		String generatePDF = p.generatePDF(inputDir , "Agenor de Miranda Araújo Neto", "999.888.777-45",timestamp );
+		assertThat(Path.of(generatePDF)).isEqualTo(Path.of(expected));
+	}
+	
+	@Test
+	void testIfTwoStringPathsAreTheSame() {
+		Path expected = Path.of("C:\\code_home\\mock\\pdf-gen\\output\\Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
+ 		Path produced = Path.of("C:\\code_home\\mock\\pdf-gen/output/Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
 		
-		assertThat(generatePDF).isEqualTo(expected);
+		assertThat(produced).isEqualTo(expected);
 	}
 
 }

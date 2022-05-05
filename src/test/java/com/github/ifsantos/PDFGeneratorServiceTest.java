@@ -44,7 +44,7 @@ class PDFGeneratorServiceTest {
 	void setUp() throws Exception {
 		MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-        when(g.generatePDF(any(), any(), any(), any())).thenReturn(outputFolder);
+        when(g.generatePDF(any(), any(), any())).thenReturn(outputFolder);
         
         r = new PDFRequest();
         r.setInputFolder(inputFolder);
