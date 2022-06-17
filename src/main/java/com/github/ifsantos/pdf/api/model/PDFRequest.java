@@ -1,4 +1,4 @@
-package com.github.ifsantos.api.model;
+package com.github.ifsantos.pdf.api.model;
 
 import java.util.ArrayList;
 import java.util.List;

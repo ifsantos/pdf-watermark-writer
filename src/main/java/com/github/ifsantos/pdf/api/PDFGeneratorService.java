@@ -1,8 +1,8 @@
-package com.github.ifsantos.api;
+package com.github.ifsantos.pdf.api;
 
 import com.github.ifsantos.PDFGenerator;
-import com.github.ifsantos.api.model.PDFRequest;
-import com.github.ifsantos.api.model.PDFResponse;
+import com.github.ifsantos.pdf.api.model.PDFRequest;
+import com.github.ifsantos.pdf.api.model.PDFResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import reactor.core.scheduler.Schedulers;
 
 
 @RestController
-@RequestMapping
+@RequestMapping(path = "/api")
 public class PDFGeneratorService {
 	@Autowired
 	public PDFGenerator generator;

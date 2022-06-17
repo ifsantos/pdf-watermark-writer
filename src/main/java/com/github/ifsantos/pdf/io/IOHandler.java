@@ -1,6 +1,7 @@
-package com.github.ifsantos.io;
+package com.github.ifsantos.pdf.io;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,21 +27,28 @@ import org.springframework.stereotype.Service;
 public class IOHandler {
 	private static Logger log = LoggerFactory.getLogger(IOHandler.class);
 
-	public BufferedImage readImage(String imagePath) {
+	public byte[]  readImage(String imagePath) {
 		log.info("Reading image file "+imagePath);
 		try {
-			return ImageIO.read(new File(imagePath));
+			return Files.readAllBytes(Path.of(imagePath));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-
 	public byte[] getImageBytes(BufferedImage image) {
-		log.info("Getting image bytes");
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			ImageIO.write(image, "png", bos);
 			return bos.toByteArray();
+		} catch (IOException e) {
+			throw new RuntimeException("Error getting image bytes",e);
+		}
+	}
+
+	public BufferedImage getBufferedImage(byte[] imageBytes) {
+		log.info("Getting Buffered image");
+		try {
+			return ImageIO.read(new ByteArrayInputStream(imageBytes));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
