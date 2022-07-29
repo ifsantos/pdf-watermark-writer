@@ -13,7 +13,7 @@
 	<name>pdf-watermark-writer</name>
 	<description>PDF Generator with watermark for content protection</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
