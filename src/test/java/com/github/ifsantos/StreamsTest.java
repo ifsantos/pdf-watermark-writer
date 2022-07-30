@@ -1,5 +1,8 @@
 package com.github.ifsantos;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -8,34 +11,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class StreamsTest {
-    
 
     @Test
-    public void test(){
+    public void testCollectArrayWithSpaces(){
         int N=10;
-        int a[]=new int[N];
+        Integer a[]=new Integer[N];
         for (int i=0; i<N; i++) {
             a[i] = i;
         }
-        System.out.print(Stream.of(a)
+        String collect = Stream.of(a)
         .map(String::valueOf )
         .collect(Collectors.joining(" ") 
-     ));
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Testing print array now");
-			int N=10;
-			
-			Integer[] arr = new Integer[N]; //Declare it as the Class Type
-			for (int i=0; i<N; i++) {
-                arr[i] = i;
-			 // input values
-			}
-            
-			System.out.print(
-				Stream.of(arr).map(Object::toString).collect(Collectors.joining(" ") 
-            ));
+     );
+        String expected = "0 1 2 3 4 5 6 7 8 9";
+        assertEquals(expected,collect);
+        assertThat(collect).isEqualTo(expected);
     }
 
 }
