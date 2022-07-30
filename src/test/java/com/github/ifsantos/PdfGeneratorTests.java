@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,8 @@ class PdfGeneratorTests {
 		
 		try {
 			InputStream is = PdfGeneratorTests.class.getClassLoader().getResourceAsStream("test.png");
-			imgByteArray =  is.readAllBytes();
+			imgByteArray = new byte[is.available()];
+			is.read(imgByteArray);
 			log.info("Mock Image Byte Array size: {} bytes",imgByteArray.length);
 		} catch (Exception e) {
 			throw new TestInstantiationException(e.toString());
@@ -69,13 +71,13 @@ class PdfGeneratorTests {
 		p.setInputFolder(inputDir);
 		String generatePDF = p.generatePDF("Agenor de Miranda Araújo Neto", "999.888.777-45",timestamp );
 		
-		assertThat(Path.of(generatePDF)).isEqualTo(Path.of(expected));
+		assertThat(Paths.get(generatePDF)).isEqualTo(Paths.get(expected));
 	}
 	
 	@Test
 	void testIfTwoStringPathsAreTheSame() {
-		Path expected = Path.of("C:\\code_home\\mock\\pdf-gen\\output\\Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
- 		Path produced = Path.of("C:\\code_home\\mock\\pdf-gen/output/Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
+		Path expected = Paths.get("C:\\code_home\\mock\\pdf-gen\\output\\Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
+ 		Path produced = Paths.get("C:\\code_home\\mock\\pdf-gen/output/Agenor_de_Miranda_Araújo_Neto1651759712704.pdf");
 		
 		assertThat(produced).isEqualTo(expected);
 	}

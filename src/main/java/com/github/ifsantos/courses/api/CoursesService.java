@@ -44,7 +44,7 @@ public class CoursesService {
         
         Optional<Course> findById = repo.findById(course.getId());
         
-        if (findById.isEmpty())
+        if (!findById.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         
         Course stored = findById.get();
@@ -60,7 +60,7 @@ public class CoursesService {
         
         Optional<Course> findById = repo.findById(course.getId());
         
-        if (findById.isEmpty())
+        if (!findById.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         
         Course stored = findById.get();

@@ -6,17 +6,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.github.ifsantos.pdf.io.IOHandler;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Rectangle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.github.ifsantos.pdf.io.IOHandler;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Rectangle;
 
 @Service
 public class PDFGenerator {
@@ -31,7 +32,7 @@ public class PDFGenerator {
 
 	public String generatePDF(String licencedName, String cpf, Long timestamp) {
 		String outputFileName = licencedName.replace(" ", "_") + timestamp + ".pdf";
-		Path outputFilePath = Path.of(inputFolder).resolve("output").resolve(outputFileName);
+		final Path outputFilePath = Paths.get(inputFolder).resolve("output").resolve(outputFileName);
 		
 		log.info("Resolvigd output path: {}", outputFilePath);
 

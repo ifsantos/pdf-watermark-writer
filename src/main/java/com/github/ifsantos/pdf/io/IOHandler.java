@@ -9,6 +9,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class IOHandler {
 	public byte[]  readImage(String imagePath) {
 		log.info("Reading image file {}",imagePath);
 		try {
-			return Files.readAllBytes(Path.of(imagePath));
+			return Files.readAllBytes(Paths.get(imagePath));
 		} catch (Exception e) {
 			throw new IORuntimeException(e);
 		}
