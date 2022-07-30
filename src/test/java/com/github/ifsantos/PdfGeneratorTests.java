@@ -7,14 +7,17 @@ import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.TestInstantiationException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.slf4j.Logger;
@@ -31,6 +34,7 @@ class PdfGeneratorTests {
 	PDFGenerator p;
 	@Mock
 	IOHandler h;
+	static byte[] imgByteArray = {};
 	private String inputDir = "C:\\code_home\\mock\\pdf-gen";
 	Long timestamp = System.currentTimeMillis();
 	String expected = inputDir + File.separator +"output"+File.separator+"Agenor_de_Miranda_Araújo_Neto"+timestamp+".pdf";
@@ -42,12 +46,24 @@ class PdfGeneratorTests {
         array.add( "001.png" );
 		when(h.getFileNamesFromFolder(any(), any())).thenReturn(array);
         when(h.readImage(any())).thenReturn(new byte[1]);
-        byte[] byteArray = {0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,1};
-		when(h.getImageBytes(any())).thenReturn(byteArray);
-		when(h.getBufferedImage(any())).thenReturn(ImageIO.read(new ByteArrayInputStream(byteArray)));
+		when(h.getImageBytes(any())).thenReturn(imgByteArray);
+		when(h.getBufferedImage(any())).thenReturn(ImageIO.read(new ByteArrayInputStream(imgByteArray)));
         doNothing().when(h).addImageToPdf(any(),any());
 	}
 	
+	@BeforeAll
+	static void loadImgInput(){
+		
+		try {
+			InputStream is = PdfGeneratorTests.class.getClassLoader().getResourceAsStream("test.png");
+			imgByteArray =  is.readAllBytes();
+			log.info("Mock Image Byte Array size: {} bytes",imgByteArray.length);
+		} catch (Exception e) {
+			throw new TestInstantiationException(e.toString());
+		}
+	}
+
+
 	@Test
 	void generatePDFSucess() {
 		p.setInputFolder(inputDir);
