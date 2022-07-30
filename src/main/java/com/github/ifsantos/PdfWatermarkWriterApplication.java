@@ -36,7 +36,7 @@ public class PdfWatermarkWriterApplication {
 	}
 
 	@Bean
-	public CommandLineRunner loadNfe(CourseRepository repo){
+	public CommandLineRunner printArray(){
 		
 		return args -> {
 			log.info("Testing print array");
@@ -47,13 +47,9 @@ public class PdfWatermarkWriterApplication {
 				arr[i] = i;
 			}
 			String collect = Stream.of(arr).sorted()
-			.map(PdfWatermarkWriterApplication::v)
+			.map(v -> Integer.toString(v))
 			.collect(Collectors.joining("|-|"));
 			log.info( collect);
 		};
-	}
-
-	public static String v(Integer i){
-		return Integer.toString(i);
 	}
 }
