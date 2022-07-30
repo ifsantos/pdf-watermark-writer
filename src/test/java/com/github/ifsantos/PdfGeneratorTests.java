@@ -30,13 +30,15 @@ import com.itextpdf.text.Document;
 
 @SpringBootTest
 class PdfGeneratorTests {
-	private static Logger log = LoggerFactory.getLogger(PdfGeneratorTests.class);
+	static Logger log = LoggerFactory.getLogger(PdfGeneratorTests.class);
+	static byte[] imgByteArray = {};
+	
 	@InjectMocks
 	PDFGenerator p;
 	@Mock
 	IOHandler h;
-	static byte[] imgByteArray = {};
-	private String inputDir = "C:\\code_home\\mock\\pdf-gen";
+	
+	String inputDir = "C:\\code_home\\mock\\pdf-gen";
 	Long timestamp = System.currentTimeMillis();
 	String expected = inputDir + File.separator +"output"+File.separator+"Agenor_de_Miranda_Araújo_Neto"+timestamp+".pdf";
 	
@@ -54,7 +56,6 @@ class PdfGeneratorTests {
 	
 	@BeforeAll
 	static void loadImgInput(){
-		
 		try {
 			InputStream is = PdfGeneratorTests.class.getClassLoader().getResourceAsStream("test.png");
 			imgByteArray = new byte[is.available()];
