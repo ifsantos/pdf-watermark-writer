@@ -33,7 +33,7 @@ public class PDFGenerator {
 		String outputFileName = licencedName.replace(" ", "_") + timestamp + ".pdf";
 		Path outputFilePath = Path.of(inputFolder).resolve("output").resolve(outputFileName);
 		
-		log.info("Resolvigd output path: " + outputFilePath.toString());
+		log.info("Resolvigd output path: {}", outputFilePath);
 
 		Document document = io.pdfDocumentFactory(outputFilePath);
 		formatLayout(document);
