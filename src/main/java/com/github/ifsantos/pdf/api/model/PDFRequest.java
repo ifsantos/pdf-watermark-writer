@@ -5,9 +5,11 @@ import java.util.List;
 
 public class PDFRequest {
 	String inputFolder;
-	List<User> users = new ArrayList<>();
+	List<User> users;
 
-	public PDFRequest() { }
+	public PDFRequest() {
+		this.users = new ArrayList<>();
+	 }
 
 	public List<User> getUsers() {
 		return users;
@@ -30,7 +32,6 @@ public class PDFRequest {
 		String cpf;
 
 		public User(String licensedName, String cpf) {
-			super();
 			this.licensedName = licensedName;
 			this.cpf = cpf;
 		}

@@ -29,7 +29,7 @@ public class IOHandler {
 	private static Logger log = LoggerFactory.getLogger(IOHandler.class);
 
 	public byte[]  readImage(String imagePath) {
-		log.info("Reading image file {}",imagePath);
+		log.debug("Reading image file {}",imagePath);
 		try {
 			return Files.readAllBytes(Paths.get(imagePath));
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class IOHandler {
 	}
 
 	public BufferedImage getBufferedImage(byte[] imageBytes) {
-		log.info("Getting Buffered image");
+		log.debug("Getting Buffered image");
 		try {
 			return ImageIO.read(new ByteArrayInputStream(imageBytes));
 		} catch (IOException e) {
@@ -56,7 +56,7 @@ public class IOHandler {
 	}
 
 	public void addImageToPdf(byte[] imageBytes, Document document) {
-		log.info("Adding image to PDF Document");
+		log.debug("Adding image to PDF Document");
 		try {
 			Image img = Image.getInstance(imageBytes);
 			document.add(img);
@@ -66,12 +66,12 @@ public class IOHandler {
 	}
 
 	public List<String> getFileNamesFromFolder(String sourceFolder, FilenameFilter fileType) {
-		log.info("Listing contents from input folder");
+		log.debug("Listing contents from input folder");
 		return Arrays.stream(new File(sourceFolder).list(fileType)).sorted().collect(Collectors.toList());
 	}
 
 	public Document pdfDocumentFactory(Path outputFilePath) {
-		log.info("Creating PDF Document file");
+		log.debug("Creating PDF Document file");
 		Document document = new Document();
 		try {
 			Files.createDirectories(outputFilePath.getParent());

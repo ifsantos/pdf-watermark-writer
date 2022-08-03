@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import com.github.ifsantos.pdf.api.PDFGeneratorService;
+import com.github.ifsantos.pdf.api.PDFGeneratorFluxService;
 import com.github.ifsantos.pdf.api.model.PDFRequest;
 import com.github.ifsantos.pdf.api.model.PDFRequest.User;
 import com.github.ifsantos.pdf.api.model.PDFResponse;
@@ -28,7 +28,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 class PDFGeneratorServiceTest {
 	
 	@InjectMocks
-	PDFGeneratorService service;
+	PDFGeneratorFluxService service;
 	
 	@Mock
 	PDFGenerator g;

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 import com.github.ifsantos.courses.api.model.Course;
 import com.github.ifsantos.courses.repository.CourseRepository;
@@ -21,7 +20,7 @@ public class PdfWatermarkWriterApplication {
 		SpringApplication.run(PdfWatermarkWriterApplication.class, args);
 	}
 
-	@Bean
+	// @Bean
 	public CommandLineRunner initDB(CourseRepository repo){
 		
 		return args -> {
@@ -35,7 +34,7 @@ public class PdfWatermarkWriterApplication {
 		};
 	}
 
-	@Bean
+	// @Bean
 	public CommandLineRunner printArray(){
 		
 		return args -> {

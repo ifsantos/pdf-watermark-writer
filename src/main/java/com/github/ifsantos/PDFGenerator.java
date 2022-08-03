@@ -21,20 +21,30 @@ import com.itextpdf.text.Rectangle;
 
 @Service
 public class PDFGenerator {
+	Logger log = LoggerFactory.getLogger(getClass());
 	static final String S = File.separator;
-	private static Logger log = LoggerFactory.getLogger(PDFGenerator.class);
+	
+	private List<byte[]> images = new ArrayList<>();
+	
+	private String inputFolder;
+	
 	@Autowired
 	private IOHandler io;
 
-	private List<byte[]> images = new ArrayList<>();
-
-	private String inputFolder;
-
+	/**
+     * Generates a pdf file from contents of inputFolder, containing a watermark 
+     * with licencedName and cpf.
+	 * Returns the generated filename.
+     * @param licencedName
+     * @param cpf
+     * @param timestamp
+	 * @return The file path of the generated file
+     */
 	public String generatePDF(String licencedName, String cpf, Long timestamp) {
 		String outputFileName = licencedName.replace(" ", "_") + timestamp + ".pdf";
 		final Path outputFilePath = Paths.get(inputFolder).resolve("output").resolve(outputFileName);
 		
-		log.info("Resolvigd output path: {}", outputFilePath);
+		log.debug("Resolved output path: {}", outputFilePath);
 
 		Document document = io.pdfDocumentFactory(outputFilePath);
 		formatLayout(document);
@@ -50,22 +60,23 @@ public class PDFGenerator {
 		return outputFilePath.toString();
 	}
 	private void loadImages(){
-		log.info("Loading images from input folder to memory");
+		log.debug("Loading images from input folder to memory");
 		if (images.isEmpty()) {
-			io.getFileNamesFromFolder(inputFolder, getPngFileFilter()).forEach(inputFile -> {
-				images.add(io.readImage(inputFolder + S + inputFile));
-			});
+			io.getFileNamesFromFolder(inputFolder, getPngFileFilter())
+			.forEach(inputFile -> 
+				images.add(io.readImage(inputFolder + S + inputFile))
+			);
 		}
 	}
 
 	private void formatLayout(Document document) {
-		log.info("Formatting PDF layout");
-			document.setPageSize(new Rectangle(1920, 1080));
+		log.debug("Formatting PDF layout");
+		document.setPageSize(new Rectangle(1920, 1080));
 		document.setMargins(0, 0, 0, 0);
 	}
 
 	private byte[] createWatermarkedImage(byte[] imageBytes, String licencedName, String cpf) {
-		log.info("Creating watermarked image");
+		log.debug("Creating watermarked image");
 		BufferedImage watermarked = io.getBufferedImage(imageBytes);
 		Graphics g = watermarked.getGraphics();
 		g.setFont(g.getFont().deriveFont(35f));
@@ -79,7 +90,7 @@ public class PDFGenerator {
 	}
 
 	private void drawLicensedName(String licencedName, Graphics g) {
-		log.info("Drawing watermark");
+		log.debug("Drawing watermark");
 		g.drawString(licencedName, 550, 250);
 		g.drawString(licencedName, 550, 750);
 	}
@@ -90,12 +101,7 @@ public class PDFGenerator {
 	}
 
 	private FilenameFilter getPngFileFilter() {
-		return new FilenameFilter() {
-			@Override
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".png");
-			}
-		};
+		return (dir, name) -> name.toLowerCase().endsWith(".png");
 	}
 
 	public String getInputFolder() {

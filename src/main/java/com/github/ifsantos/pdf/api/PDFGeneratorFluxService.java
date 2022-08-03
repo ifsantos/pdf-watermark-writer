@@ -18,7 +18,7 @@ import reactor.core.scheduler.Schedulers;
 
 @RestController
 @RequestMapping(path = "/api")
-public class PDFGeneratorService {
+public class PDFGeneratorFluxService {
 	@Autowired
 	public PDFGenerator generator;
 
