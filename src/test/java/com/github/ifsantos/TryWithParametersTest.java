@@ -28,7 +28,7 @@ public class TryWithParametersTest {
     @Test
     void throwsIOException(){
         assertThrowsExactly(IOException.class, () -> {
-            try(InputStream is = getClass().getClassLoader().getResourceAsStream("test.txt")){
+            try(InputStream is = getClass().getClassLoader().getResourceAsStream("test.png")){
                 is.close();
                 is.read();
             }
