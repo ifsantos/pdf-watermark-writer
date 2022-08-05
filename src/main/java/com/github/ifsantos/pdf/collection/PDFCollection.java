@@ -2,10 +2,8 @@ package com.github.ifsantos.pdf.collection;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.pdfbox.io.IOUtils;
 import org.slf4j.Logger;
@@ -40,10 +38,14 @@ public class PDFCollection {
             throw new FileNotFoundException(e, id);
         }
     }
-
+    
     public static class FileNotFoundException extends ResponseStatusException{
         public FileNotFoundException(Throwable t, String id){
             super(HttpStatus.NOT_FOUND, String.format("File ID %s Not Found",id),t);
         }
-    }   
+    }
+
+    public Map<String, String> getCollection() {
+        return collection;
+    }
 }   
