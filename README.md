@@ -21,3 +21,4 @@ mvn compile exec:java -'Dexec.mainClass=com.github.ifsantos.PdfWatermarkWriterAp
  - <https://www.codejava.net/java-se/file-io/programmatically-extract-a-zip-file-using-java>
  - <https://spring.io/guides/gs/uploading-files/>
  - <https://stackoverflow.com/questions/12239868/whats-the-correct-way-to-send-a-file-from-rest-web-service-to-client>
+ - [HTTP2](https://byte27.com/2020/02/03/using-http-2-in-your-spring-boot-application/)
